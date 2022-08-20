@@ -20,6 +20,15 @@ body {
   color: #201f1f;
 }
 
+a {
+  color: #00f;
+  text-decoration: none;
+}
+
+a:visited {
+  color: red;
+}
+
 h1,
 h2,
 h3 {
@@ -78,6 +87,10 @@ img {
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
 }
 
+.dim {
+  opacity: 0.2;
+}
+
 .card {
   border-top: 3px solid #000;
   padding-top: 3px;
@@ -109,6 +122,10 @@ img {
 .gap--md { gap: 16px; }
 .gap--lg { gap: 24px; }
 
+.pointer {
+  cursor: pointer;
+}
+
 /*********/
 /* ICONS */
 /*********/
@@ -124,12 +141,16 @@ img {
   background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB3aWR0aD0iNzUycHQiIGhlaWdodD0iNzUycHQiIHZlcnNpb249IjEuMSIgdmlld0JveD0iMCAwIDc1MiA3NTIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiA8ZGVmcz4KICA8Y2xpcFBhdGggaWQ9ImEiPgogICA8cGF0aCBkPSJtMTM5LjIxIDE1MGg0NzMuNTh2NDUyaC00NzMuNTh6Ii8+CiAgPC9jbGlwUGF0aD4KIDwvZGVmcz4KIDxnIGNsaXAtcGF0aD0idXJsKCNhKSI+CiAgPHBhdGggZD0ibTQ0OS4wNyAyOTguMzQgMTYzLjcyIDIzLjAxNi0xMTcuODMgMTE1Ljk4IDI4Ljc0NiAxNjIuODItMTQ2LjcxLTc2LjI0Ni0xNDYgNzcuNjY0IDI3LjE4NC0xNjMuMS0xMTguOTYtMTE0Ljg0IDE2My40OC0yNC41ODIgNzIuNDU3LTE0OC42MXoiLz4KIDwvZz4KPC9zdmc+Cg==');
 }
 
-/*****************/
-/* Singletons ;) */
-/*****************/
+/******************/
+/* SPECIAL THINGS */
+/******************/
 
 #hat {
   margin-top: 60px;
+}
+
+.hand {
+  font-size: 20px;
 }
 
 #logo {
