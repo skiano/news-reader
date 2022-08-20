@@ -1,0 +1,146 @@
+html {
+  font-size: 62.5%; /* Now 10px = 1rem! */
+}
+
+/**************/
+/* TYPOGRAPHY */
+/**************/
+
+a,
+input,
+button,
+select,
+option,
+textarea,
+body {
+  font-family: gimlet-micro-condensed, serif;
+  font-weight: 400;
+  font-size: 1.6rem;
+	line-height: 2.4rem;
+  color: #201f1f;
+}
+
+h1,
+h2,
+h3 {
+  font-family: gimlet-display-compressed, serif;
+  font-weight: 500;
+}
+
+h2 {
+  font-size: 3rem;
+  line-height: 3.6rem;
+  /* color:rgb(255, 68, 0); */
+  color: #000;
+}
+
+h4 {
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+}
+
+h5 {
+  font-size: 12.5px;
+  font-style: italic;
+}
+
+strong {
+  font-weight: 700;
+}
+
+em {
+  font-weight: 400;
+  font-style: italic;
+}
+
+img {
+  width: 100%;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+/*************/
+/* UTILITIES */
+/*************/
+
+.container {
+  width: 100%;
+  max-width: 950px;
+  padding: 0 20px;
+}
+
+.grid {
+  display: grid;
+  row-gap: 35px;
+  column-gap: 26px;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+.card {
+  border-top: 3px solid #000;
+  padding-top: 3px;
+}
+
+.flexrow {
+	display: flex;
+}
+
+.flexrow.reverse {
+	flex-direction: row-reverse;
+}
+
+.flexcol {
+	display: flex;
+	flex-direction: column;
+}
+
+.align-center { align-items: center; }
+.align-stretch { align-items: stretch; }
+.justify-center { justify-content: center; }
+.space-between { justify-content: space-between; }
+
+.grow {
+	flex-grow: 1;
+}
+
+.gap--sm { gap: 8px; }
+.gap--md { gap: 16px; }
+.gap--lg { gap: 24px; }
+
+/*********/
+/* ICONS */
+/*********/
+
+.icn {
+  width: 20px;
+  height: 20px;
+  background-position: center;
+  background-size: contain;
+}
+
+.icn--blackstar {
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB3aWR0aD0iNzUycHQiIGhlaWdodD0iNzUycHQiIHZlcnNpb249IjEuMSIgdmlld0JveD0iMCAwIDc1MiA3NTIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiA8ZGVmcz4KICA8Y2xpcFBhdGggaWQ9ImEiPgogICA8cGF0aCBkPSJtMTM5LjIxIDE1MGg0NzMuNTh2NDUyaC00NzMuNTh6Ii8+CiAgPC9jbGlwUGF0aD4KIDwvZGVmcz4KIDxnIGNsaXAtcGF0aD0idXJsKCNhKSI+CiAgPHBhdGggZD0ibTQ0OS4wNyAyOTguMzQgMTYzLjcyIDIzLjAxNi0xMTcuODMgMTE1Ljk4IDI4Ljc0NiAxNjIuODItMTQ2LjcxLTc2LjI0Ni0xNDYgNzcuNjY0IDI3LjE4NC0xNjMuMS0xMTguOTYtMTE0Ljg0IDE2My40OC0yNC41ODIgNzIuNDU3LTE0OC42MXoiLz4KIDwvZz4KPC9zdmc+Cg==');
+}
+
+/*****************/
+/* Singletons ;) */
+/*****************/
+
+#hat {
+  margin-top: 60px;
+}
+
+#logo {
+  color: #000;
+  letter-spacing: -0.015em;
+  font-size: 4.2em;
+  line-height: 1em;
+}
+
+@media screen and (min-width: 600px) {
+  #logo {
+    font-size: 6.2em;
+  }
+}
