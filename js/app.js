@@ -1,3 +1,4 @@
+const API_KEY = 'be5922e28b9b4f7e8c1000041e936493';
 const MAIN = document.getElementById('app');
 const MONTHS = 'Jan.Feb.Mar.Apr.May.Jun.Jul.Aug.Sep.Oct.Nov.Dec'.split('.');
 
@@ -34,7 +35,7 @@ const tag = (tag, attr = {}, children = []) => {
 
 const formatDate = (timestamp) => {
   const date = new Date(timestamp);
-	return `${MONTHS[date.getMonth()]} ${date.getDate()}`;
+  return `${MONTHS[date.getMonth()]} ${date.getDate()}`;
 };
 
 const bruteSet = (key, value) => {
@@ -54,6 +55,22 @@ const getOrSet = (key, value) => {
   bruteSet(key, value);
   return value;
 }
+
+/********/
+/* DATA */
+/********/
+
+fetch(`https://newsapi.org/v2/everything?language=en`, {
+  method: "GET",
+  withCredentials: true,
+  headers: {
+    "X-Api-Key": API_KEY,
+    "Content-Type": "application/json"
+  }
+}).then(async (res) => {
+  const json = await res.json();
+  console.log(json);
+})
 
 /*********/
 /* STATE */
@@ -103,7 +120,6 @@ const articleCard = ({
   });
 
   return tag('li', {
-    'data-article': url,
     class: 'flexcol gap--sm card pointer',
     onclick(evt) {
       evt.preventDefault();
