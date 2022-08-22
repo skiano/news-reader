@@ -36,15 +36,28 @@ body {
   font-size: 1.6rem;
 	line-height: 2.4rem;
   color: #201f1f;
+  border-radius: 0;
+  outline: none;
+  border: none;
+}
+
+input[type='search'],
+input[type='text'] {
+  border: 1px solid #00f;
+  padding: 6px;
+}
+
+a:focus,
+input:focus {
+  position: relative;
+  outline: 1px solid #f0f;
+  outline-offset: 3px;
+  z-index: 10;
 }
 
 a {
   color: #00f;
   text-decoration: none;
-}
-
-a:visited {
-  color: red;
 }
 
 h1,
@@ -128,6 +141,7 @@ img {
 }
 
 .align-center { align-items: center; }
+.align-baseline { align-items: baseline; }
 .align-stretch { align-items: stretch; }
 .justify-center { justify-content: center; }
 .space-between { justify-content: space-between; }
@@ -142,6 +156,18 @@ img {
 
 .pointer {
   cursor: pointer;
+}
+
+.btn {
+  background: #00f;
+  color: #fff;
+  outline: none;
+  border: none;
+  padding: 6px 10px;
+  font-size: 12px;
+  border-radius: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
 }
 
 /*********/

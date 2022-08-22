@@ -29,6 +29,24 @@ const tag = (tag, attr = {}, children = []) => {
   return elm;
 };
 
+const setLocal = (key, value) => {
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+  } catch (e) {
+    localStorage.clear();
+    localStorage.setItem(key, JSON.stringify(value));
+  }
+};
+
+const getOrSetLocal = (key, value) => {
+  try {
+    const v = JSON.parse(localStorage.getItem(key));
+    if (v) return v;
+  } catch (_) {}
+  setLocal(key, value);
+  return value;
+};
+
 const MONTHS = 'Jan.Feb.Mar.Apr.May.Jun.Jul.Aug.Sep.Oct.Nov.Dec'.split('.');
 const formatDate = (timestamp) => {
   const date = new Date(timestamp);
@@ -39,42 +57,28 @@ const formatDate = (timestamp) => {
 /* STATE MGMT */
 /**************/
 
-const bruteSet = (key, value) => {
-  try {
-    localStorage.setItem(key, JSON.stringify(value));
-  } catch (e) {
-    localStorage.clear();
-    localStorage.setItem(key, JSON.stringify(value));
-  }
-}
-
-const getOrSet = (key, value) => {
-  try {
-    const v = JSON.parse(localStorage.getItem(key));
-    if (v) return v;
-  } catch (_) {}
-  bruteSet(key, value);
-  return value;
-}
-
-const listeners = {};
-const STATE = new Proxy({
-  view: 'all',
+const initialState = {
+  view: window.location.pathname,
   query: '',
   page: 1,
   total: 0,
   articles: [],
   totalResults: [],
-  viewed: getOrSet('viewed', {}),
-  favorites: getOrSet('favorites', {}),
-}, {
+  viewed: getOrSetLocal('viewed', {}),
+  favorites: getOrSetLocal('favorites', {}),
+};
+
+const listeners = {};
+const STATE = new Proxy(initialState, {
   get(target, p) {
     return target[p];
   },
   set(target, p, v) {
-    target[p] = v;
-    if (listeners[p]) listeners[p].forEach(cb => cb(v));
-    return target;
+    if (target[p] !== v) {
+      target[p] = v;
+      if (listeners[p]) listeners[p].forEach(cb => cb(v)); 
+    }
+    return true;
   },
 });
 
@@ -87,9 +91,6 @@ const subscribe = (prop, cb) => {
   }
 }
 
-subscribe('viewed', (viewed) => { bruteSet('viewed', viewed); });
-subscribe('favorites', (favorites) => { bruteSet('favorites', favorites); });
-
 /***********/
 /* ACTIONS */
 /***********/
@@ -100,6 +101,7 @@ const toggleFavoriteArticle = (article) => {
     delete copy[article.url];
     STATE.favorites = copy;
   } else {
+    article.favoritedAt = Date.now(),
     STATE.favorites = {
       ...STATE.favorites,
       [article.url]: article,
@@ -109,11 +111,29 @@ const toggleFavoriteArticle = (article) => {
 
 const fetchHeadlines = async () => {
   const { query, page } = STATE;
-  let url = query ? `/api/everything?language=en&sortBy=publishedAt&q='${encodeURI(query)}'` : '/api/top-headlines?country=us';
+  let url = query ? `/api/everything?language=en&q='${encodeURI(query)}'` : '/api/top-headlines?country=us';
   if (page) url += `&page=${page}`;
   const res = await fetch(url);
   const result = await res.json();
-  STATE.articles = result.articles;
+  STATE.articles = result.articles.map(({
+    url,
+    title,
+    source,
+    urlToImage,
+    publishedAt,
+    description,
+  }) => {
+    // remove the source from the title since we are rendering it in its own element
+    if (title && title.indexOf(`- ${source.name}`) >= 0) title = title.slice(0, title.indexOf(`- ${source.name}`));
+    return {
+      url,
+      title,
+      source,
+      urlToImage,
+      publishedAt,
+      description,
+    }
+  });
   STATE.totalResults = result.totalResults;
 }
 
@@ -121,16 +141,8 @@ const fetchHeadlines = async () => {
 /* COMPONENTS */
 /**************/
 
-const articleCard = ({
-  url,
-  title,
-  source,
-  urlToImage,
-  publishedAt,
-  description,
-}) => {
-  // remove the source from the title since we are rendering it in its own element
-  if (title.indexOf(`- ${source.name}`) >= 0) title = title.slice(0, title.indexOf(`- ${source.name}`));
+const articleCard = (article) => {
+  const { url, title, source, publishedAt, description, urlToImage } = article;
 
   const star = tag('a', {
     href: '#',
@@ -143,18 +155,9 @@ const articleCard = ({
       evt.preventDefault();
       if (evt.target === star) {
         star.classList.toggle('dim');
-        toggleFavoriteArticle({
-          url,
-          title,
-          source,
-          urlToImage,
-          publishedAt,
-          description,
-        });
+        toggleFavoriteArticle(article);
       } else {
         console.log('open', url.replace('//amp.', '//'));
-        const iframe = tag('iframe', { src: url.replace('//amp.', '//') }); // HACKTASTIC...
-        MAIN.appendChild(iframe);
       }
     },
   }, [
@@ -172,49 +175,149 @@ const articleCard = ({
   ]);
 };
 
-const articleList = () => {
-  fetchHeadlines();
-  const section = tag('section', { class: 'container' });
-  let ul;
-  subscribe('articles', (articles) => {
-    if (ul) ul.remove();
-    console.log(articles);
-    ul = tag('ul', { class: 'grid' }, articles.map(articleCard));
-    section.appendChild(ul);
+const articleSummary = (article) => {
+  const { url, title, description, source, publishedAt, urlToImage } = article;
+  const star = tag('a', {
+    href: '#',
+    class: 'icn icn--blackstar' + (STATE.favorites[url] ? '' : ' dim'),
   });
-  return section;
-};
 
-const searchbar = tag('form', {
-  class: 'flexrow',
+  return tag('li', {
+    class: 'flexcol card gap--sm',
+    onclick(evt) {
+      evt.preventDefault();
+      if (evt.target === star) {
+        star.classList.toggle('dim');
+        toggleFavoriteArticle(article);
+      } else {
+        console.log('open', url.replace('//amp.', '//'));
+      }
+    },
+  }, [
+    tag('div', { class: 'flexrow space-between' }, [
+      tag('div', { class: 'flexrow' }, [
+        tag('h4', {}, source.name),
+        tag('h5', {}, '&nbsp;•&nbsp;' + formatDate(publishedAt)),
+      ]),
+      star,
+    ]),
+    tag('div', { class: '' }, [
+      urlToImage && tag('div', {
+        style: 'float: right; max-width: 32vw; width: 100%; margin: 0 0 10px 10px;'
+      }, [
+        tag('img', {
+          src: urlToImage,
+        alt: title,
+        })
+      ]),
+      tag('h2', { class: 'grow', style: 'margin-bottom: 12px;' }, title),
+      tag('p', {}, description),
+    ]),
+  ]);
+}
+
+const searchBar = tag('form', {
+  class: 'flexrow align-stretch',
   onsubmit(evt) {
     evt.preventDefault();
     fetchHeadlines();
   }
 }, [
   tag('input', {
+    class: 'grow',
     type: 'search',
     oninput(evt) {
       STATE.query = evt.target.value;
     }
   }),
-  tag('input', { type: 'submit', value: 'Search' }),
+  tag('input', { class: 'btn', type: 'submit', value: 'Search' }),
 ]);
+
+const articleList = () => {
+  fetchHeadlines();
+  const section = tag('section', { class: 'container dl' }, [
+    searchBar,
+  ]);
+  let ul;
+  subscribe('articles', (articles) => {
+    if (ul) ul.remove();
+    ul = tag('ul', { class: 'grid', style: 'margin: 30px 0;' }, articles.map(articleCard));
+    section.appendChild(ul);
+  });
+  return section;
+};
+
+const favoriteList = () => {
+  fetchHeadlines();
+  const section = tag('section', { class: 'container' });
+  let ul;
+  subscribe('favorites', (favorites) => {
+    if (ul) ul.remove();
+    const cards = Object.values(favorites)
+      .sort((a, b) => (a.favoritedAt || a.publishedAt) < (a.favoritedAt || b.publishedAt) ? 1 : -1)
+      .map(articleSummary);
+      console.log(cards);
+    ul = tag('ul', { class: 'flexcol gap--lg' }, cards);
+    section.appendChild(ul);
+  });
+  return section;
+};
+
+const fastLink = (attr, children) => {
+  return tag('a', {
+    ...attr,
+    onclick(evt) {
+      evt.preventDefault();
+      window.history.pushState(null, null, attr.href);
+      STATE.view = attr.href;
+    }
+  }, children);
+}
 
 /***********************/
 /* PUT IT ALL TOGETHER */
 /***********************/
 
 const articles = articleList();
+const favorites = favoriteList();
 
-subscribe('query', (q) => { console.log(q)})
+window.addEventListener('popstate', () => {
+  STATE.view = document.location.pathname;
+});
+
+subscribe('view', (view) => {
+  if (view === '/favorites') {
+    articles.style.display = 'none';
+    favorites.style.display = 'block';
+  } else {
+    articles.style.display = 'block';
+    favorites.style.display = 'none';
+  }
+});
+
+subscribe('viewed', (viewed) => {
+  setLocal('viewed', viewed);
+});
+
+subscribe('favorites', (favorites) => {
+  setLocal('favorites', favorites);
+});
 
 document.body.appendChild(tag('main', { class: 'flexcol align-center gap--lg' }, [
-  tag('header', { id: 'hat', class: 'container' }, [
-    tag('h3', { id: 'logo' }, 'News Reader.')
-  ]),
-  tag('div', { class: 'container flexrow gap--md' }, [
-    searchbar
+  tag('header', { id: 'hat', class: 'container flexrow gap--md align-baseline' }, [
+    tag('h3', { id: 'logo' }, 'News.'),
+    fastLink({
+      href: '/',
+    }, [
+      'Recent',
+    ]),
+    fastLink({
+      href: '/favorites',
+    }, [
+      'Favorites',
+    ]),
   ]),
   articles,
+  favorites,
 ]));
+
