@@ -31,9 +31,7 @@ const server = http.createServer(async (req, res) => {
         <link rel="stylesheet" href="https://use.typekit.net/agw6wib.css">
         <style>${css}</style>
       </head>
-      <body class="flexcol align-center gap--lg">
-        <main id="app">
-        </main>
+      <body>
         <script type="module">${js}</script>
       </body>
     </html>`);
