@@ -256,7 +256,6 @@ const favoriteList = () => {
     const cards = Object.values(favorites)
       .sort((a, b) => (a.favoritedAt || a.publishedAt) < (a.favoritedAt || b.publishedAt) ? 1 : -1)
       .map(articleSummary);
-      console.log(cards);
     ul = tag('ul', { class: 'flexcol gap--lg' }, cards);
     section.appendChild(ul);
   });
@@ -320,4 +319,3 @@ document.body.appendChild(tag('main', { class: 'flexcol align-center gap--lg' },
   articles,
   favorites,
 ]));
-
