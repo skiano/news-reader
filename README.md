@@ -7,6 +7,8 @@ Sample app using [NewsAPI](https://newsapi.org/).
 ```bash
 $ npm i
 $ npm start
+
+# open http://localhost:3000/
 ```
 
 ## Development
