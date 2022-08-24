@@ -21,7 +21,9 @@ html {
 /**************/
 
 html {
-  font-size: 62.5%; /* Now 10px = 1rem! */
+  font-family: 'Times New Roman', Times, serif;
+  background: rgb(255, 255, 104);
+  text-rendering: optimizeLegibility;
 }
 
 a,
@@ -31,10 +33,10 @@ select,
 option,
 textarea,
 body {
-  font-family: gimlet-micro-condensed, serif;
+  font-family: inherit;
   font-weight: 400;
-  font-size: 1.6rem;
-	line-height: 2.4rem;
+  font-size: 16px;
+	line-height: 24px;
   color: #201f1f;
   border-radius: 0;
   outline: none;
@@ -43,40 +45,48 @@ body {
 
 input[type='search'],
 input[type='text'] {
-  border: 1px solid #00f;
+  border: 1px solid #555;
   padding: 6px;
 }
 
-a:focus,
-input:focus {
+input:focus,
+button:focus {
   position: relative;
-  outline: 1px solid #f0f;
-  outline-offset: 3px;
+  outline: 1px solid #00f;
+  outline-offset: -3px;
   z-index: 10;
 }
 
-a {
+a:focus,
+a:hover {
   color: #00f;
+}
+
+a {
+  color: inherit;
   text-decoration: none;
+}
+
+button:hover {
+  cursor: pointer;
 }
 
 h1,
 h2,
 h3 {
-  font-family: gimlet-display-compressed, serif;
-  font-weight: 500;
+  /* font-weight: 500; */
 }
 
-h2 {
-  font-size: 3rem;
-  line-height: 3.6rem;
-  /* color:rgb(255, 68, 0); */
-  color: #000;
+h2, .t2 {
+  font-size: 30px;
+  line-height: 34px;
+  /* font-weight: 500; */
+  letter-spacing: -0.01em;
 }
 
 h4 {
   text-transform: uppercase;
-  font-weight: 700;
+  font-weight: bold;
   font-size: 12px;
   letter-spacing: 0.04em;
 }
@@ -101,6 +111,13 @@ img {
   max-height: 100%;
 }
 
+.img {
+  width: 100%;
+  padding-bottom: 50%;
+  background-color: rgba(0,0,0,0.1);
+  background-size: cover;
+}
+
 /*************/
 /* UTILITIES */
 /*************/
@@ -120,11 +137,6 @@ img {
 
 .dim {
   opacity: 0.2;
-}
-
-.card {
-  border-top: 3px solid #000;
-  padding-top: 3px;
 }
 
 .flexrow {
@@ -159,7 +171,7 @@ img {
 }
 
 .btn {
-  background: #00f;
+  background: #201f1f;
   color: #fff;
   outline: none;
   border: none;
@@ -179,6 +191,7 @@ img {
   height: 20px;
   background-position: center;
   background-size: contain;
+  background-color: transparent;
 }
 
 .icn--blackstar {
@@ -189,6 +202,12 @@ img {
 /* SPECIAL THINGS */
 /******************/
 
+.card {
+  border-top: 3px solid #000;
+  padding-top: 3px;
+  overflow: hidden;
+}
+
 #hat {
   margin-top: 60px;
 }
@@ -198,8 +217,7 @@ img {
 }
 
 #logo {
-  color: #000;
-  letter-spacing: -0.015em;
+  letter-spacing: -0.075em;
   font-size: 4.2em;
   line-height: 1em;
 }
