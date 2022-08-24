@@ -2,9 +2,10 @@
 
 Sample app using [NewsAPI](https://newsapi.org/).
 
-## Usage
+## Setup
 
 ```bash
+$ npm i
 $ npm start
 ```
 
