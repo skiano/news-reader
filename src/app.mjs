@@ -34,8 +34,8 @@ const ArticleCard = (article) => {
       }),
     ]),
     urlToImage && _.img({ src: urlToImage, alt: title }),
-    _.h2({ class: 't2' }, title),
-    _.p(encode(description)),
+    title && _.h2({ class: 't2' }, title),
+    description && _.p(encode(description)),
   ]);
 };
 
@@ -62,7 +62,6 @@ const Headlines = (ctx) => {
           if (title && title.indexOf(`- ${source.name}`) >= 0) {
             article.title = title.slice(0, title.indexOf(`- ${source.name}`));
           }
-          delete article.content;
           return toString(ArticleCard(article));
         }));
       resolve(_.ul({ class: 'grid', style: 'margin-bottom: 50px;' },
