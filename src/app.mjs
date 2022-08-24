@@ -11,14 +11,13 @@ import { _, toString, toStream } from 'genz';
 
 const PORT = process.env.PORT || 3000;
 const API_KEY = process.env.API_KEY || 'be5922e28b9b4f7e8c1000041e936493';
-
+const CSS_STRING = fs.readFileSync('src/news.css').toString();
 const MONTHS = 'Jan.Feb.Mar.Apr.May.Jun.Jul.Aug.Sep.Oct.Nov.Dec'.split('.');
+
 const formatDate = (timestamp) => {
   const date = new Date(timestamp);
   return `${MONTHS[date.getMonth()]} ${date.getDate()}`;
 };
-
-const css = fs.readFileSync('news.css').toString();
 
 const ArticleCard = (article) => {
   let { url, title, source, publishedAt, description, urlToImage } = article;
@@ -77,7 +76,7 @@ const Page = (opt = {}, ...content) => {
     _.head(
       _.title(opt.title || 'News.'),
       _.meta({ name: 'viewport', content: 'width=device-width, initial-scale=1.0' }),
-      _.style(css),
+      _.style(CSS_STRING),
     ),
     _.body({ class: 'flexcol align-center gap--md'},
       _.header({ id: 'hat', class: 'container flexrow gap--md align-baseline space-between' }, [

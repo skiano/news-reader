@@ -5,8 +5,8 @@
   "description": "Sample News Reader App",
   "private": true,
   "scripts": {
-    "start": "node app.mjs",
-    "dev": "nodemon app.mjs -e mjs,js,css"
+    "start": "node src/app.mjs",
+    "dev": "nodemon src/app.mjs -e mjs,js,css"
   },
   "dependencies": {
     "classic-level": "^1.2.0",
