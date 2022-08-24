@@ -22,6 +22,6 @@ Alternatively, you can embrace a minimalist/incremental approach, where you opt 
 
 The result is idiosyncratic, but it challenged me to consider what a MVP can actually be. And while it may not be “maintainable” in the sense that most developers will be familiar with its architecture, I think the fact that it is so tiny means it would be easy to evolve going forward.
 
-There are three files, no build tools, and very few dependencies. The app is able to send bytes to the client before it is done requesting data from NewsAPI, and the solution for storing favorite articles is just about the least abstract solution I could come up with.
+There are three files, no build tools, and very few dependencies. The app is able to send bytes to the client before it is done requesting data from NewsAPI, and the solution for storing favorite articles is just about the least abstract solution I could come up with. The next thing I would enchance would be error handling.
 
 If this were a real product and I were on a team, I probably would not opt for this direction, but I think it was worth trying!
