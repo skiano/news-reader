@@ -22,6 +22,7 @@ const getOrSetLocal = (key, value) => {
     if (v) return v;
   } catch (_) {}
   setLocal(key, value);
+  console.log(value)
   return value;
 };
 
@@ -29,7 +30,7 @@ const container = document.getElementById('favorites');
 const highlights = document.createElement('style');
 document.body.appendChild(highlights);
 
-const favorites = new Proxy(getOrSetLocal(LOCAL_KEY), {
+const favorites = new Proxy(getOrSetLocal(LOCAL_KEY, {}), {
   set(t, p, v) {
     t[p] = v;
     setLocal(LOCAL_KEY, t);
