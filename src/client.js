@@ -22,7 +22,6 @@ const getOrSetLocal = (key, value) => {
     if (v) return v;
   } catch (_) {}
   setLocal(key, value);
-  console.log(value)
   return value;
 };
 
